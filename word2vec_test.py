@@ -2,6 +2,7 @@ import logging
 import nltk
 import gensim
 from nltk import corpus
+
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 save_path = 'C:/Users/51694/PycharmProjects/work2vec_wiki/test_model'
 

@@ -1,18 +1,19 @@
 import jieba
-import gensim
 import logging
 import time
+import os
+
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-save_path = 'C:/Users/51694/PycharmProjects/work2vec_wiki/wiki_model'
-docs_path = 'C:/Users/Administrator/PycharmProjects/work2vec_wiki/wikijianzh.text'
-out_path = 'C:/Users/Administrator/PycharmProjects/work2vec_wiki/train_zhwiki.text'
+
+docs_path = os.getcwd() + '\\' + 'wikijianzh.txt'
+out_path = os.getcwd() + '\\' + 'tokenize_zhwiki.txt'
 
 if __name__ == '__main__':
     zh_docs = []
     count = 0
     with open(docs_path, encoding='utf-8') as f:
         start_time = time.clock()
-        for doc in f.readlines():
+        for doc in f.readlines()[200000:]:
             temp_doc = jieba.lcut(doc)
             zh_doc = []
             for word in temp_doc:
@@ -25,19 +26,20 @@ if __name__ == '__main__':
                 cost_time = end_time - start_time
                 print('tokenize doc:' + str(count))
                 print('cost time:' + str(cost_time) + 's')
+            if count >= 100000:
+                break
     end_time = time.clock()
     tokenize_time = end_time - start_time
     print('tokenize totally cost' + str(tokenize_time) + 's')
     print('-----------------tokenize end-----------------------')
-    with open(out_path, encoding='utf-8') as f:
+    with open(out_path, 'a', encoding='utf-8') as f:
         space = ' '
+        count = 0
         for i in zh_docs:
+            count += 1
             doc = space.join(i) + "\n"
             f.write(doc)
+            if count % 1000 == 0:
+                print('doc write' + str(count))
     print('-----------------write end-----------------------')
-    # start_time = time.clock()
-    # wiki_model = gensim.models.Word2Vec(zh_docs)
-    # cost_time = time.clock() - start_time
-    # print('training totally cost' + str(tokenize_time) + 's')
-    # wiki_model.save(save_path)
-    # print('mode saved')
+
